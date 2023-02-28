@@ -1,26 +1,64 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import "./App.css";
+import Game from "./components/Game";
+import Result from "./components/Result";
+import Start from "./components/Start";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+  const [page, setPage] = useState("Start");
+  const [name, setName] = useState("Player");
+  const [compWins, setCompWins] = useState(0);
+  const [playerWins, setPlayerWins] = useState(0);
+
+  //   const changePage = (page: string, ...args: string[] | number[]): void => {
+  //     switch (args.length) {
+  //       case 0:
+  //         setPage(page);
+  //         break;
+  //       case 1:
+  //         setPage(page);
+  //         setName(args[0]);
+  //         break;
+  //       case 2:
+  //         setPage(page);
+  //         setCompWins(args[0]);
+  //         setPlayerWins(args[1]);
+  //     }
+  //   };
+
+  const changePageGame = (
+    page: string,
+    compWins: number,
+    playerWins: number
+  ): void => {
+    setPage(page);
+    setCompWins(compWins);
+    setPlayerWins(playerWins);
+  };
+
+  const changePageResult = (page: string): void => {
+    setPage(page);
+  };
+  
+  const changePageStart = (page: string, name: string): void => {
+    setPage(page);
+    setName(name);
+  };
+
+  switch (page) {
+    case "Game":
+      return <Game changePage={changePageGame} name={name} />;
+    case "Result":
+      return (
+        <Result
+          changePage={changePageResult}
+          compWins={compWins}
+          playerWins={playerWins}
+        />
+      );
+    default:
+      return <Start changePage={changePageStart} />;
+  }
 }
 
 export default App;
