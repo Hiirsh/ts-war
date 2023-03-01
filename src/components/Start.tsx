@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 
-//  (page: string, name: string): void
 interface Props {
-  changePage: (page: string, name: string) => void;
+  changePage: (page: string) => void;
+  setName: (name: string) => void;
 }
 const Start = ({ changePage }: Props) => {
   const [name, setName] = useState("");
@@ -14,7 +14,14 @@ const Start = ({ changePage }: Props) => {
         placeholder={"Enter your name"}
         onChange={(event) => setName(event.target.value)}
       />
-      <button onClick={() => changePage("Game", name)}>Start</button>
+      <button
+        onClick={() => {
+          changePage("Game");
+          setName(name);
+        }}
+      >
+        Start
+      </button>
     </div>
   );
 };

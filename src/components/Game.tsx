@@ -7,7 +7,9 @@ interface Card {
 }
 
 interface Props {
-  changePage: (page: string, compWins: number, playerWins: number) => void;
+  changePage: (page: string) => void;
+  setCompWins: (wins: number)=>void;
+  setPlayerWins: (wins: number)=>void;
   name: string;
 }
 
@@ -32,7 +34,11 @@ const Game = ({ changePage, name }: Props) => {
       setPlayerCard(`${pCard.value}, ${pCard.suit}`);
       setCompWins(compWinsTemp);
       setPlayerWins(playerWinsTemp);
-    } else changePage("Result", compWins, playerWins);
+    } else {
+      changePage("Result");
+      setCompWins(compWins)
+      setPlayerWins(playerWins)
+    }
   };
 
   const deskGeneration = (): Card[] => {
