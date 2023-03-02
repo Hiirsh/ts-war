@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
 interface Card {
   suit: string;
@@ -8,36 +8,35 @@ interface Card {
 
 interface Props {
   changePage: (page: string) => void;
-  setCompWins: (wins: number)=>void;
-  setPlayerWins: (wins: number)=>void;
+  setCompWins: (wins: number) => void;
+  setPlayerWins: (wins: number) => void;
   name: string;
 }
 
-const Game = ({ changePage, name }: Props) => {
+const Game = ({ changePage, setCompWins, setPlayerWins, name }: Props) => {
   const [compCard, setCompCard] = useState("Computer card");
   const [playerCard, setPlayerCard] = useState("Player card");
   const [compCards, setCompCards] = useState<Array<Card>>([]);
   const [playerCards, setPlayerCards] = useState<Array<Card>>([]);
-  const [compWins, setCompWins] = useState(0);
-  const [playerWins, setPlayerWins] = useState(0);
+  const compWins = useRef<number>(0);
+  const playerWins = useRef<number>(0);
 
   const handleClickNext = () => {
     if (playerCards.length) {
       const cCard = compCards.pop()!;
       const pCard = playerCards.pop()!;
-      let compWinsTemp = compWins;
-      let playerWinsTemp = playerWins;
-
-      if (cCard.rank > pCard.rank) compWinsTemp++;
-      else if (cCard.rank < pCard.rank) playerWinsTemp++;
+      if (cCard.rank > pCard.rank) compWins.current = compWins.current + 1;
+      else if (cCard.rank < pCard.rank) playerWins.current = playerWins.current +1;
       setCompCard(`${cCard.value}, ${cCard.suit}`);
       setPlayerCard(`${pCard.value}, ${pCard.suit}`);
-      setCompWins(compWinsTemp);
-      setPlayerWins(playerWinsTemp);
+      setCompWins(compWins.current);
+      setPlayerWins(playerWins.current);
     } else {
       changePage("Result");
-      setCompWins(compWins)
-      setPlayerWins(playerWins)
+      setCompWins(compWins.current);
+      setPlayerWins(playerWins.current);
+      compWins.current = 0;
+      playerWins.current = 0;
     }
   };
 
